@@ -15,8 +15,6 @@ const AuthProvider = ({ children }) => {
         user: user ? JSON.parse(user) : {},
     });
 
-    console.log(authState);
-
     const setAuthInfo = ({ token, user }) => {
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
@@ -38,7 +36,7 @@ const AuthProvider = ({ children }) => {
         if (authState.token && authState.user) {
             return true;
         }
-        return true;
+        return false;
     };
 
     return (
@@ -46,7 +44,6 @@ const AuthProvider = ({ children }) => {
             value={{
                 authState,
                 setAuthState: (authInfo) => {
-                    console.log({authInfo});
                     return setAuthInfo(authInfo);
                 },
                 logout,

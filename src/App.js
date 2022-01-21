@@ -1,6 +1,7 @@
 import React, { Suspense, useContext } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { ChakraProvider } from '@chakra-ui/react';
 import { AuthContext, AuthProvider } from './context/AuthContext';
 
@@ -8,65 +9,44 @@ import Layout from './components/Layout';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
+import Room from './pages/Room';
 
-console.log(process.env.GRAPHQL_API_URL);
+const httpLink = createHttpLink({
+    uri: 'http://localhost:4000/',
+});
+
+const authLink = setContext((_, { headers }) => {
+    const token = localStorage.getItem('token');
+    return {
+        headers: {
+            ...headers,
+            authorization: token ? `${token}` : '',
+        },
+    };
+});
 
 const client = new ApolloClient({
-    uri: 'https://booking-room-app-server.herokuapp.com/',
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
-    request: (operation) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            operation.setContext({
-                headers: { Authorization: `${token}` },
-            });
-        }
-    },
-    onError: ({ networkError, graphQLErrors }) => {
-        if (graphQLErrors) {
-            const unauthorizedErrors = graphQLErrors.filter((error) => error.extensions.code === 'UNAUTHENTICATED');
-            if (unauthorizedErrors.length) {
-                window.location = '/login';
-            }
-        }
-    },
 });
 
 const LoadingFallback = () => (
     <Layout>
-        <div className='p-4'>Loading...</div>
+        <div>Loading...</div>
     </Layout>
 );
 
-const AuthenticatedRoute = ({ children, ...rest }) => {
+const AuthenticatedRoute = ({ component: Component }) => {
     const auth = useContext(AuthContext);
-    return (
-        <Routes>
-            <Route
-                {...rest}
-                render={() => (auth.isAuthenticated() ? <Layout>{children}</Layout> : <Navigate to='/' />)}
-            ></Route>
-        </Routes>
-    );
+    if (auth.isAuthenticated()) {
+        return (
+            <Layout>
+                <Component />
+            </Layout>
+        );
+    }
+    return <Navigate to='/login' />;
 };
-
-const UnauthenticatedRoutes = () => (
-    <Layout>
-        <Routes>
-            <Route path='/login' element={<Login />} />
-            <Route path='/signup' element={<Signup />} />
-            <Route path='/' element={<Home />} />
-        </Routes>
-    </Layout>
-);
-
-const AppRoute = () => (
-    <>
-        <Suspense fallback={<LoadingFallback />}>
-            <UnauthenticatedRoutes />
-        </Suspense>
-    </>
-);
 
 const App = () => {
     return (
@@ -74,8 +54,14 @@ const App = () => {
             <ApolloProvider client={client}>
                 <BrowserRouter>
                     <AuthProvider>
-                        <AuthenticatedRoute path='/' />
-                        <AppRoute />
+                        <Suspense fallback={<LoadingFallback />}>
+                            <Routes>
+                                <Route path='/login' element={<Login />} />
+                                <Route path='/signup' element={<Signup />} />
+                                <Route path='/room' element={<Room />} />
+                                <Route path='/' element={<AuthenticatedRoute component={Home} />} />
+                            </Routes>
+                        </Suspense>
                     </AuthProvider>
                 </BrowserRouter>
             </ApolloProvider>
