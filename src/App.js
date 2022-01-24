@@ -12,7 +12,7 @@ import Home from './pages/Home';
 import Appointments from './pages/Appointments';
 
 const httpLink = createHttpLink({
-    uri: 'http://localhost:4000/',
+    uri: 'https://booking-room-app-server.herokuapp.com/',
 });
 
 const authLink = setContext((_, { headers }) => {

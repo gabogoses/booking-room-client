@@ -47,8 +47,10 @@ const ProcessSignup = ({ signupData }) => {
     const authContext = useContext(AuthContext);
     const [redirectOnSignup, setRedirectOnSignup] = useState(false);
 
+
     useEffect(() => {
         const { signup } = signupData;
+        console.log(signup);
         authContext.setAuthState(signup);
         setRedirectOnSignup(true);
     }, [authContext, signupData]);
@@ -59,6 +61,7 @@ const ProcessSignup = ({ signupData }) => {
 const Signup = () => {
     const [signup, { data, loading, error }] = useMutation(SIGNUP);
     const toast = useToast();
+    console.log(data);
 
     const onSubmit = (values) => {
         signup({ variables: { ...values } });
@@ -120,10 +123,10 @@ const Signup = () => {
                                                 onClick={handleSubmit}
                                                 type='submit'
                                                 isLoading={loading}
-                                                bg={'blue.400'}
+                                                bg={'red.400'}
                                                 color={'white'}
                                                 _hover={{
-                                                    bg: 'blue.500',
+                                                    bg: 'red.500',
                                                 }}
                                             >
                                                 Sign up

@@ -120,10 +120,10 @@ const Login = () => {
                                                 onClick={handleSubmit}
                                                 type='submit'
                                                 isLoading={loading}
-                                                bg={'blue.400'}
+                                                bg={'red.400'}
                                                 color={'white'}
                                                 _hover={{
-                                                    bg: 'blue.500',
+                                                    bg: 'red.500',
                                                 }}
                                             >
                                                 Sign in
