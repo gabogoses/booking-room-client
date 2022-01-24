@@ -47,7 +47,7 @@ const ME = gql`
 `;
 
 const RoomCard = (props) => {
-    const [event, { loading, error, data }] = useMutation(BOOK_EVENT);
+    const [event, { data }] = useMutation(BOOK_EVENT);
     const { data: userData, refetch: refetchUserData } = useQuery(ME);
     const { authState } = useContext(AuthContext);
     const { roomNumber, image, roomId, events, refetch } = props;
@@ -70,6 +70,8 @@ const RoomCard = (props) => {
     }, [data]);
 
     useEffect(() => {
+        refetch();
+        refetchUserData();
         getRoomRegistry();
     }, [userData, events]);
 
@@ -130,7 +132,7 @@ const RoomCard = (props) => {
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Book one hour slot on room: {roomNumber}</ModalHeader>
+                    <ModalHeader>Book one hour on room: {roomNumber}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <SimpleGrid columns={{ base: 2, md: 5 }} spacing={1}>
@@ -139,14 +141,19 @@ const RoomCard = (props) => {
                                     <Button key={idx} isDisabled color={'gray.500'}>
                                         {room.hour}
                                     </Button>
-                                ) : room.status === 'booked_by_user' ? (
+                                ) : room.status === 'not_available' ? (
                                     <Button key={idx} color={'blue.500'} isDisabled>
                                         Booked
+                                    </Button>
+                                ) : room.status === 'booked_by_user' ? (
+                                    <Button key={idx} color={'blue.800'} isDisabled>
+                                        <Text fontSize='xs'>My Booking</Text>
                                     </Button>
                                 ) : (
                                     <Button
                                         key={idx}
-                                        onClick={() =>
+                                        onClick={(event) => {
+                                            event.preventDefault();
                                             onSubmit({
                                                 eventName: `Meet ${authState.user.email} on room ${roomNumber}`,
                                                 eventStartTime: moment()
@@ -158,8 +165,8 @@ const RoomCard = (props) => {
                                                         millisecond: 0,
                                                     }),
                                                 roomId: roomId,
-                                            })
-                                        }
+                                            });
+                                        }}
                                     >
                                         {room.hour}
                                     </Button>

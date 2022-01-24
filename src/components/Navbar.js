@@ -60,7 +60,7 @@ const Navbar = () => {
                                     </Center>
                                     <br />
                                     <Center>
-                                        <Text fontSize='sm'>{user.email}</Text>
+                                        <Text>{user.email}</Text>
                                     </Center>
                                     <br />
                                     <MenuDivider />
