@@ -126,7 +126,6 @@ const Login = () => {
                                             >
                                                 Sign in
                                             </Button>
-                                            
                                         </Stack>
                                     </>
                                 )}
@@ -140,81 +139,3 @@ const Login = () => {
 };
 
 export default Login;
-
-// const Login = () => {
-//     const [login, { data, loading, error }] = useMutation(LOGIN);
-
-//     return (
-//         <>
-//             {data && <ProcessLogin loginData={data} />}
-
-//             <section className='w-full sm:w-1/2 h-screen m-auto p-8 sm:pt-10'>
-//                 <Card>
-//                     <div className='flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
-//                         <div className='max-w-md w-full'>
-//                             <div>
-//                                 <div className='w-32 m-auto mb-6'>
-//                                     <img src={logo} alt='Logo' />
-//                                 </div>
-//                                 <h2 className='mb-2 text-center text-3xl leading-9 font-extrabold text-gray-900'>
-//                                     Log in to your account
-//                                 </h2>
-//                                 <p className='text-gray-600 text-center'>
-//                                     <Link to='/signup'></Link>
-//                                 </p>
-//                             </div>
-//                             <Formik
-//                                 initialValues={{
-//                                     email: '',
-//                                     password: '',
-//                                 }}
-//                                 onSubmit={(values) =>
-//                                     login({
-//                                         variables: { ...values },
-//                                     })
-//                                 }
-//                                 validationSchema={LoginSchema}
-//                             >
-//                                 {() => (
-//                                     <Form className='mt-8'>
-//                                         {data && <FormSuccess text={data.login.message} />}
-//                                         {error && <FormError text={error.message} />}
-//                                         <div>
-//                                             <div className='mb-2'>
-//                                                 <div className='mb-1'>
-//                                                     <Label text='Email' />
-//                                                 </div>
-//                                                 <FormInput
-//                                                     ariaLabel='Email'
-//                                                     name='email'
-//                                                     type='text'
-//                                                     placeholder='Email'
-//                                                 />
-//                                             </div>
-//                                             <div>
-//                                                 <div className='mb-1'>
-//                                                     <Label text='Password' />
-//                                                 </div>
-//                                                 <FormInput
-//                                                     ariaLabel='Password'
-//                                                     name='password'
-//                                                     type='password'
-//                                                     placeholder='Password'
-//                                                 />
-//                                             </div>
-//                                         </div>
-//                                         <div className='mt-6'>
-//                                             <GradientButton type='submit' text='Log In' loading={loading} />
-//                                         </div>
-//                                     </Form>
-//                                 )}
-//                             </Formik>
-//                         </div>
-//                     </div>
-//                 </Card>
-//             </section>
-//         </>
-//     );
-// };
-
-// export default Login;

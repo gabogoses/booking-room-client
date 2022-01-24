@@ -83,13 +83,13 @@ const RoomCard = (props) => {
 
     useEffect(() => {
         if (data) {
-            refetch()
-            refetchUserData()
-         }
-    },[data])
+            refetch();
+            refetchUserData();
+        }
+    }, [data]);
 
     useEffect(() => {
-       updateRoomRegistry()
+        updateRoomRegistry();
     }, [userData, events]);
 
     const { isOpen, onOpen, onClose } = useDisclosure();

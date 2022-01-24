@@ -50,7 +50,6 @@ const roomRegister = (events, currentHour, userEvents, currentRoomId) => {
     const filteredUserEvent = userEvents.filter((event) => event.roomId.id === currentRoomId);
 
     for (const userEvent of filteredUserEvent) {
-
         const { eventStartTime } = userEvent;
         const extractedHour = moment(eventStartTime).utc().format('HH');
         for (const hour of hourList) {

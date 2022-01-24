@@ -126,7 +126,6 @@ const Signup = () => {
                                             >
                                                 Sign up
                                             </Button>
-                                            
                                         </Stack>
                                     </>
                                 )}
