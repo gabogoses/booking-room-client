@@ -30,13 +30,13 @@ const CANCEL_EVENT = gql`
 
 const Appointments = () => {
     const { data, refetch } = useQuery(ME);
-    const [cancelEvent, {loading, error, data: mutationData}] = useMutation(CANCEL_EVENT);
+    const [cancelEvent, { data: mutationData }] = useMutation(CANCEL_EVENT);
 
     useEffect(() => {
         if (mutationData?.deleteEvent?.message === 'Event deleted') {
             refetch();
         }
-    },[mutationData, data]);
+    }, [mutationData, data, refetch]);
 
     const hasEvents = data?.me?.events?.length > 0;
     const events = data?.me?.events;
@@ -72,7 +72,7 @@ const Appointments = () => {
                                                 })
                                             }
                                         >
-                                        Cancel
+                                            Cancel
                                         </Button>
                                     </Td>
                                 </Tr>

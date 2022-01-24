@@ -15,7 +15,9 @@ import {
     Heading,
     useColorModeValue,
     useToast,
+    Text,
 } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../context/AuthContext';
 
@@ -126,6 +128,13 @@ const Login = () => {
                                             >
                                                 Sign in
                                             </Button>
+                                            <Text align={'center'}>
+                                                Don't have an account yet?{' '}
+                                                <Link to='/signup'>
+                                                    {' '}
+                                                    <Text color={'blue.400'}>Signup</Text>
+                                                </Link>
+                                            </Text>
                                         </Stack>
                                     </>
                                 )}

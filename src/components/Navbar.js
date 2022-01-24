@@ -13,8 +13,9 @@ import {
     Stack,
     Center,
 } from '@chakra-ui/react';
-import { Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
+
 import { AuthContext } from '../context/AuthContext';
 
 const Time = () => {
@@ -35,13 +36,16 @@ const Time = () => {
 };
 
 const Navbar = () => {
-    const { authState } = useContext(AuthContext);
+    const { authState, logout } = useContext(AuthContext);
     const { user } = authState;
+
     return (
         <>
             <Box bg={'gray.100'} px={4}>
                 <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-                    <Text>Coke Day</Text>
+                    <Text>
+                        <Link to='/'>Coke Day</Link>
+                    </Text>
                     <Time />
                     <Flex alignItems={'center'}>
                         <Stack direction={'row'} spacing={7}>
@@ -61,9 +65,15 @@ const Navbar = () => {
                                     <br />
                                     <MenuDivider />
                                     <MenuItem>
-                                        Your appointments
+                                        <Link to='/appointments'>My appointments</Link>
                                     </MenuItem>
-                                    <MenuItem>Logout</MenuItem>
+                                    <MenuItem
+                                        onClick={() => {
+                                            logout();
+                                        }}
+                                    >
+                                        Logout
+                                    </MenuItem>
                                 </MenuList>
                             </Menu>
                         </Stack>
