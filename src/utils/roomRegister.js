@@ -23,7 +23,7 @@ const roomRegister = (events, currentHour, userEvents, currentRoomId) => {
             return {
                 id: currentRoomId,
                 hour,
-                status: 'passed',
+                status: 'past',
             };
         }
 

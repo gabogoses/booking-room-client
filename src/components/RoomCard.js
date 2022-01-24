@@ -135,13 +135,13 @@ const RoomCard = (props) => {
                     <ModalBody>
                         <SimpleGrid columns={{ base: 2, md: 5 }} spacing={1}>
                             {rooms.map((room, idx) =>
-                                room.status === 'passed' ? (
+                                room.status === 'past' ? (
                                     <Button key={idx} isDisabled color={'gray.500'}>
                                         {room.hour}
                                     </Button>
                                 ) : room.status === 'booked_by_user' ? (
                                     <Button key={idx} color={'blue.500'} isDisabled>
-                                        Your slot
+                                        Booked
                                     </Button>
                                 ) : (
                                     <Button
