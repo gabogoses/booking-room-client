@@ -3,6 +3,8 @@ import { Box, Text, Table, Thead, Tbody, Tr, Th, Td, Button, Spacer } from '@cha
 import { useMutation, useQuery, gql } from '@apollo/client';
 import moment from 'moment';
 
+import Layout from '../components/Layout';
+
 const ME = gql`
     query Me {
         me {
@@ -46,47 +48,50 @@ const Appointments = () => {
     };
 
     return (
-        <Box maxW='7xl' mx={'auto'} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
-            {hasEvents ? (
-                <>
-                    <Table align='center' fontSize='xl' variant='simple'>
-                        <Thead>
-                            <Tr>
-                                <Th>Room Number</Th>
-                                <Th>Start Time</Th>
-                                <Th>Duration</Th>
-                                <Th isNumeric>Actions</Th>
-                            </Tr>
-                        </Thead>
-                        {events.map(({ id, eventStartTime, roomId: { roomNumber } }) => (
-                            <Tbody>
+        <>
+            <Layout />
+            <Box maxW='7xl' mx={'auto'} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
+                {hasEvents ? (
+                    <>
+                        <Table align='center' fontSize='xl' variant='simple'>
+                            <Thead>
                                 <Tr>
-                                    <Td>{roomNumber}</Td>
-                                    <Td>{moment(eventStartTime).utc().format('HH:mm')}</Td>
-                                    <Td>60 minutes</Td>
-                                    <Td isNumeric>
-                                        <Button
-                                            onClick={() =>
-                                                onSubmit({
-                                                    eventId: `${id}`,
-                                                })
-                                            }
-                                        >
-                                            Cancel
-                                        </Button>
-                                    </Td>
+                                    <Th>Room Number</Th>
+                                    <Th>Start Time</Th>
+                                    <Th>Duration</Th>
+                                    <Th isNumeric>Actions</Th>
                                 </Tr>
-                            </Tbody>
-                        ))}
-                    </Table>
-                    <Spacer />
-                </>
-            ) : (
-                <Text align='center' fontSize='3xl'>
-                    You have no events booked
-                </Text>
-            )}
-        </Box>
+                            </Thead>
+                            {events.map(({ id, eventStartTime, roomId: { roomNumber } }) => (
+                                <Tbody>
+                                    <Tr>
+                                        <Td>{roomNumber}</Td>
+                                        <Td>{moment(eventStartTime).utc().format('HH:mm')}</Td>
+                                        <Td>60 minutes</Td>
+                                        <Td isNumeric>
+                                            <Button
+                                                onClick={() =>
+                                                    onSubmit({
+                                                        eventId: `${id}`,
+                                                    })
+                                                }
+                                            >
+                                                Cancel
+                                            </Button>
+                                        </Td>
+                                    </Tr>
+                                </Tbody>
+                            ))}
+                        </Table>
+                        <Spacer />
+                    </>
+                ) : (
+                    <Text align='center' fontSize='3xl'>
+                        You have no events booked
+                    </Text>
+                )}
+            </Box>
+        </>
     );
 };
 

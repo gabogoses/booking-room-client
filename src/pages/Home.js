@@ -1,5 +1,6 @@
 import { useQuery, gql } from '@apollo/client';
 import { Box, SimpleGrid, Text } from '@chakra-ui/react';
+import Layout from '../components/Layout';
 
 import RoomCard from '../components/RoomCard';
 
@@ -27,6 +28,7 @@ const Home = () => {
 
     return (
         <>
+            <Layout />
             <Text textAlign={'center'} fontSize={'4xl'} py={10} fontWeight={'bold'}>
                 Book a room
             </Text>

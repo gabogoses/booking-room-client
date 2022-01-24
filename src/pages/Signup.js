@@ -20,6 +20,7 @@ import {
 import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../context/AuthContext';
+import Layout from '../components/Layout';
 
 const SignupSchema = Yup.object().shape({
     email: Yup.string().required('Email is required'),
@@ -50,7 +51,6 @@ const ProcessSignup = ({ signupData }) => {
 
     useEffect(() => {
         const { signup } = signupData;
-        console.log(signup);
         authContext.setAuthState(signup);
         setRedirectOnSignup(true);
     }, [authContext, signupData]);
@@ -61,7 +61,6 @@ const ProcessSignup = ({ signupData }) => {
 const Signup = () => {
     const [signup, { data, loading, error }] = useMutation(SIGNUP);
     const toast = useToast();
-    console.log(data);
 
     const onSubmit = (values) => {
         signup({ variables: { ...values } });
@@ -81,6 +80,7 @@ const Signup = () => {
 
     return (
         <>
+            <Layout />
             {data && <ProcessSignup signupData={data} />}
 
             <Flex minH={'100vh'} align={'center'} justify={'center'} bg={useColorModeValue('gray.50', 'gray.800')}>
@@ -113,7 +113,7 @@ const Signup = () => {
                                                 />
                                             </FormControl>
                                         </Form>
-                                        <Stack spacing={10}>
+                                        <Stack>
                                             <Stack
                                                 direction={{ base: 'column', sm: 'row' }}
                                                 align={'start'}

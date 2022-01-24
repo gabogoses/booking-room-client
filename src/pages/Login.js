@@ -20,6 +20,7 @@ import {
 import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../context/AuthContext';
+import Layout from '../components/Layout';
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string().required('Email is required'),
@@ -78,6 +79,7 @@ const Login = () => {
 
     return (
         <>
+            <Layout />
             {data && <ProcessLogin loginData={data} />}
 
             <Flex minH={'100vh'} align={'center'} justify={'center'} bg={useColorModeValue('gray.50', 'gray.800')}>
@@ -110,7 +112,7 @@ const Login = () => {
                                                 />
                                             </FormControl>
                                         </Form>
-                                        <Stack spacing={10}>
+                                        <Stack>
                                             <Stack
                                                 direction={{ base: 'column', sm: 'row' }}
                                                 align={'start'}

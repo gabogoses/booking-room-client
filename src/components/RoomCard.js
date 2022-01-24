@@ -18,6 +18,7 @@ import {
     ModalBody,
     ModalCloseButton,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from '../context/AuthContext';
 import roomRegister from '../utils/roomRegister';
@@ -53,7 +54,7 @@ const RoomCard = (props) => {
     const { roomNumber, image, roomId, events, refetch } = props;
     const utcHour = moment.utc().format('HH');
     const [rooms, setRooms] = useState([]);
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (data) {
@@ -65,11 +66,13 @@ const RoomCard = (props) => {
     useEffect(() => {
         refetch();
         refetchUserData();
-        if (userData) {
+        if (userData?.events) {
             const userEvents = userData.me.events;
             const roomRegistry = roomRegister(events, utcHour, userEvents, roomId);
             setRooms(roomRegistry);
         }
+        const roomRegistry = roomRegister(events, utcHour, [], roomId);
+        setRooms(roomRegistry);
     }, [refetch, refetchUserData, userData, events, roomId, utcHour]);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -150,6 +153,10 @@ const RoomCard = (props) => {
                                     <Button
                                         key={idx}
                                         onClick={(event) => {
+                                            if (!authState.isAuthenticated) {
+                                                event.preventDefault();
+                                                return navigate('/login');
+                                            }
                                             event.preventDefault();
                                             onSubmit({
                                                 eventName: `Meet ${authState.user.email} on room ${roomNumber}`,

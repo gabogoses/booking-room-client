@@ -5,7 +5,7 @@ const AuthContext = createContext();
 const { Provider } = AuthContext;
 
 const AuthProvider = ({ children }) => {
-    const history = useNavigate();
+    const navigate = useNavigate();
 
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
@@ -29,7 +29,7 @@ const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setAuthState({});
-        history.push('/login');
+        return navigate('/login');
     };
 
     const isAuthenticated = () => {

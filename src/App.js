@@ -39,13 +39,9 @@ const LoadingFallback = () => (
 const AuthenticatedRoute = ({ component: Component }) => {
     const auth = useContext(AuthContext);
     if (auth.isAuthenticated()) {
-        return (
-            <Layout>
-                <Component />
-            </Layout>
-        );
+        return <Component />;
     }
-    return <Navigate to='/login' />;
+    return <Navigate to='/' />;
 };
 
 const App = () => {
@@ -58,7 +54,7 @@ const App = () => {
                             <Routes>
                                 <Route path='/login' element={<Login />} />
                                 <Route path='/signup' element={<Signup />} />
-                                <Route path='/' element={<AuthenticatedRoute component={Home} />} />
+                                <Route path='/' element={<Home />} />
                                 <Route path='/appointments' element={<AuthenticatedRoute component={Appointments} />} />
                             </Routes>
                         </Suspense>
