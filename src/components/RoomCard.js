@@ -54,26 +54,23 @@ const RoomCard = (props) => {
     const utcHour = moment.utc().format('HH');
     const [rooms, setRooms] = useState([]);
 
-    const getRoomRegistry = () => {
-        if (userData) {
-            const userEvents = userData?.me?.events;
-            const roomRegistry = roomRegister(events, utcHour, userEvents, roomId);
-            setRooms(roomRegistry);
-        }
-    };
 
     useEffect(() => {
         if (data) {
             refetch();
             refetchUserData();
         }
-    }, [data]);
+    }, [data, refetch, refetchUserData]);
 
     useEffect(() => {
         refetch();
         refetchUserData();
-        getRoomRegistry();
-    }, [userData, events]);
+        if (userData) {
+            const userEvents = userData.me.events;
+            const roomRegistry = roomRegister(events, utcHour, userEvents, roomId);
+            setRooms(roomRegistry);
+        }
+    }, [refetch, refetchUserData, userData, events, roomId, utcHour]);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
