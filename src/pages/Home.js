@@ -67,22 +67,32 @@ const ME = gql`
 
 const RoomCard = (props) => {
     const [event, { loading, error, data }] = useMutation(BOOK_EVENT);
-    const { data: userData } = useQuery(ME);
+    const { data: userData, refetch: refetchUserData } = useQuery(ME);
     const { authState } = useContext(AuthContext);
-    const { roomNumber, image, roomId, events } = props;
+    const { roomNumber, image, roomId, events, refetch } = props;
     const utcHour = moment.utc().format('HH');
-    const [room, setRoom] = useState([]);
+    const [rooms, setRooms] = useState([]);
 
-    useEffect(() => {
+    const updateRoomRegistry = () => {
         if (userData) {
             const userEvents = userData?.me?.events;
             const roomRegistry = roomRegister(events, utcHour, userEvents, roomId);
-            setRoom(roomRegistry);
+            setRooms(roomRegistry);
         }
-    }, []);
-    
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    };
 
+    useEffect(() => {
+        if (data) {
+            refetch()
+            refetchUserData()
+         }
+    },[data])
+
+    useEffect(() => {
+       updateRoomRegistry()
+    }, [userData, events]);
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const onSubmit = (values) => {
         event({ variables: { ...values } });
@@ -143,13 +153,13 @@ const RoomCard = (props) => {
                     <ModalCloseButton />
                     <ModalBody>
                         <SimpleGrid columns={{ base: 2, md: 5 }} spacing={1}>
-                            {room.map((room, idx) =>
+                            {rooms.map((room, idx) =>
                                 room.status === 'passed' ? (
                                     <Button key={idx} isDisabled color={'gray.500'}>
                                         {room.hour}
                                     </Button>
-                                ) : room.status === 'booked_by_user' ?  (
-                                    <Button key={idx} color={'blue.500'} isDisabled >
+                                ) : room.status === 'booked_by_user' ? (
+                                    <Button key={idx} color={'blue.500'} isDisabled>
                                         Your slot
                                     </Button>
                                 ) : (
@@ -158,7 +168,14 @@ const RoomCard = (props) => {
                                         onClick={() =>
                                             onSubmit({
                                                 eventName: `Meet ${authState.user.email} on room ${roomNumber}`,
-                                                eventStartTime: '2022-01-21T23:00:00.000Z',
+                                                eventStartTime: moment()
+                                                    .utc()
+                                                    .set({
+                                                        hour: room.hour.split(':')[0],
+                                                        minute: 0,
+                                                        second: 0,
+                                                        millisecond: 0,
+                                                    }),
                                                 roomId: roomId,
                                             })
                                         }
@@ -183,7 +200,7 @@ const RoomCard = (props) => {
 };
 
 const Home = () => {
-    const { data } = useQuery(GET_ROOMS);
+    const { data, refetch } = useQuery(GET_ROOMS);
 
     return (
         <Box maxW='7xl' mx={'auto'} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
@@ -200,6 +217,7 @@ const Home = () => {
                                 image={roomImage}
                                 roomId={roomId}
                                 events={events}
+                                refetch={refetch}
                             />
                         ))}
                     </SimpleGrid>

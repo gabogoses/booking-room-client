@@ -19,7 +19,7 @@ const hourList = generateHoursList();
 const roomRegister = (events, currentHour, userEvents, currentRoomId) => {
     const roomRegisterList = hourList.map((hour) => {
         const splitHour = hour.split(':')[0];
-        if (splitHour < currentHour) {
+        if (splitHour <= currentHour) {
             return {
                 id: currentRoomId,
                 hour,
