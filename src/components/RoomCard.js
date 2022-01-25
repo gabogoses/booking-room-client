@@ -50,7 +50,7 @@ const ME = gql`
 const RoomCard = (props) => {
     const [event, { data }] = useMutation(BOOK_EVENT);
     const { data: userData, refetch: refetchUserData } = useQuery(ME);
-    const { authState } = useContext(AuthContext);
+    const { authState, isAuthenticated } = useContext(AuthContext);
     const { roomNumber, image, roomId, events, refetch } = props;
     const utcHour = moment.utc().format('HH');
     const [rooms, setRooms] = useState([]);
@@ -153,8 +153,7 @@ const RoomCard = (props) => {
                                     <Button
                                         key={idx}
                                         onClick={(event) => {
-                                            if (!authState.isAuthenticated) {
-                                                event.preventDefault();
+                                            if (!isAuthenticated()) {
                                                 return navigate('/login');
                                             }
                                             event.preventDefault();
